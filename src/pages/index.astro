@@ -9,9 +9,7 @@ const response = await fetch('http://localhost:3000/posts',{
 		'Authorization': `Bearer ${token?.value}`
 	},
 });
-const data = await response.json();
-console.log("data: ", data)
-            
+const data = await response.json();            
 ---
 
 <Layout title="Frontend Astro">

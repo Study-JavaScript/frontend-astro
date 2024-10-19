@@ -10,6 +10,7 @@ const errorMessageText =
 if (result) {
     if (!result.error && result.data?.ok) {
         Astro.cookies.set("token", result.data.token);
+        Astro.cookies.set("email", result.data.email);
         return Astro.redirect(`/`);
     } else {
         console.error("Error en el login:", result.error);

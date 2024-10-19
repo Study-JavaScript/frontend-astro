@@ -22,10 +22,39 @@ export const server = {
             if(response.ok){                
                 return {
                         ok: true,
-                        token: data.token
+                        token: data.token,
+                        email: input.email
                     }
             } 
         }
+    }),
+    editUser: defineAction({
+        accept: "form",
+        input: z.object({
+            id: z.string(),
+            name: z.string().optional(),
+            email: z.string().email("El email no es válido"),
+            password: z.string().optional()
+        }),
+        handler: async(input, context) => {
+            console.log("input: ", input);
+            const token = context.cookies.get("token");
+            console.log("token: ", token?.value);
+            const response = await fetch(`http://localhost:3000/users/${input.id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token?.value}`
+                },
+                body: JSON.stringify(input)
+            })
+            const data = await response.json();
+            console.log("data: ", data);
+            return {
+                ok: true,
+                data: data
+            }
+        },     
     }),
     logout: defineAction({
         accept: "form",

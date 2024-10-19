@@ -44,6 +44,18 @@ Crear el proyecto de Astro en la carpeta `frontend-astro`.
 ## 2. Desarrollo 
 ### Objetivo principal
 Desarrollo de los requerimientos para el frontend teniendo en cuenta intentando hacer uso de la arquitectura de Clean Architecture y las mejores prácticas de Astro.
+### Requisitos
+La aplicación debe tener un `frontend` básico con al menos las siguientes páginas:
+- Formulario register y login.
+- Home/Inicio donde se muestran las publicaciones de todos los usuarios ordenadas por fecha de creación (las más nuevas al principio).
+- Perfil de usuario en el que se pueden completar/editar datos personales.
+- Las publicaciones en el `frontend` deben mostrar:
+    - Contenido/descripción.
+    - Nombre del Autor.
+    - Fecha de creación/edición.
+- Porcentaje de popularidad (cantidad de likes/(cantidad de usuarios existentes - 1))
+- Añade la posibilidad a la página de inicio de ordenar las publicaciones por porcentaje de popularidad ascendente, descendente, y por autor alfabéticamente (AZ y ZA).
+- Añade a tu página de inicio una barra de búsqueda que implemente la posibilidad de buscar publicaciones que contengan el texto introducido en su contenido. Implementa la función debounce para limitar las búsquedas.
 ### Detalles
 #### Server Actions & Rendering
 - Usar server actions para las peticiones al backend.
