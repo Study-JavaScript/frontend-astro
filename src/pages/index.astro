@@ -1,4 +1,5 @@
 ---
+import PublicationsIndex from '@/components/PublicationsIndex.astro';
 import Layout from '../layouts/Layout.astro';
 const token = Astro.cookies.get("token");
 const response = await fetch('http://localhost:3000/posts',{
@@ -22,6 +23,7 @@ console.log("data: ", data)
 				data.length > 0 ?
 				<h2>Publicaciones recientes</h2>
 				<p>Hay {data.length} publicaciones</p>
+				<PublicationsIndex publications={data}/>
 				:
 				<h2>No hay publicaciones recientes</h2>
 				:

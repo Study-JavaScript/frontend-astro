@@ -1,5 +1,4 @@
 # Proceso
-
 ## 1. Instalación de Astro
 ### Objetivo principal
 Crear el proyecto de Astro en la carpeta `frontend-astro`.
@@ -42,5 +41,14 @@ Crear el proyecto de Astro en la carpeta `frontend-astro`.
 
 #### Levantar el proyecto
 - Usar el comando `pnpm dev` o `npm run dev` para levantar el proyecto en `http://localhost:4321/`
+## 2. Desarrollo 
+### Objetivo principal
+Desarrollo de los requerimientos para el frontend teniendo en cuenta intentando hacer uso de la arquitectura de Clean Architecture y las mejores prácticas de Astro.
+### Detalles
+#### Server Actions & Rendering
+- Usar server actions para las peticiones al backend.
+- Tratar de minimizar el uso del cliente, para que sea el servidor el que represente el frontend y se encargue de la lógica de la aplicación.
+- Utilizar las cookies del servidor para el manejo de sesiones y autenticación.
+
 
 
