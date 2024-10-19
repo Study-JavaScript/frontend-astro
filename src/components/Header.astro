@@ -1,28 +1,31 @@
 ---
+import { Button } from "./ui/button";
+
 const { user } = Astro.props;
 ---
 
 <header>
-  <nav>
-    <a href="/">Inicio</a>
+  <nav class="flex justify-between items-center w-dvw px-4">
+    <Button variant="link"><a href="/">Inicio</a></Button>
+    <Button variant="link"><a href="/about">Acerca de</a></Button>
     {user ? (
       <>
-        <a href="/profile">Perfil</a>
-        <button id="logout">Cerrar sesión</button>
+        <Button variant="link"><a href="/dashboard">Perfil</a></Button>
+        <Button variant="outline" className="rounded-full hover:shadow-md hover:shadow-white" id="logout">Cerrar sesión</Button>
       </>
     ) : (
       <>
-        <a href="/login">Iniciar sesión</a>
-        <a href="/register">Registrarse</a>
+        <Button variant="link"><a href="/register">Registrarse</a></Button>
+        <Button variant="outline" className="rounded-full hover:shadow-md hover:shadow-white"><a href="/login">Iniciar sesión</a></Button>
       </>
     )}
   </nav>
 </header>
 
-<script>
+<!-- <script>
   document.getElementById('logout')?.addEventListener('click', () => {
     // Implementar lógica de cierre de sesión
     localStorage.removeItem('token');
     window.location.href = '/';
   });
-</script>
+</script> -->

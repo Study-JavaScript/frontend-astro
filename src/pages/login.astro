@@ -1,0 +1,89 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { isInputError } from "astro:actions"
+import {actions} from "astro:actions"
+const result = Astro.getActionResult(actions.login);
+let errorMessage = "";
+
+if (result) {
+console.log("result: ", result)
+  if (!result.error) {
+    // Suponiendo que el login exitoso devuelve un ID de usuario
+    if(result.data.ok){
+        return Astro.redirect(`/`);
+    } else {
+        errorMessage = "Error de inicio de sesión. Por favor, verifica tus credenciales e intenta de nuevo.";
+    }
+
+  } else {
+    console.error("Error en el login:", result.error);
+    errorMessage = "Error de inicio de sesión. Por favor, verifica tus credenciales e intenta de nuevo.";
+  }
+}
+const inputErrors = isInputError(result?.error) ? result.error.fields : {}
+
+---
+
+<Layout title="Login">
+  <main class="min-h-[80vh] flex items-center justify-center bg-gray-950">
+    <div class="max-w-md w-full space-y-8 p-8 bg-white/80 rounded-xl shadow-lg">
+      <div class="text-center">
+        <h1 class="text-3xl text-gray-900 font-bold">Bienvenido de nuevo</h1>
+        <p class="mt-2 text-gray-600">Inicia sesión en tu cuenta</p>
+      </div>
+      
+      <form
+  method="POST"
+  action={actions.login}
+  class="mt-8 space-y-6"
+>
+  <div class="rounded-md shadow-sm space-y-4">
+    <div>
+      <label for="email" class="sr-only">Email</label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        required
+        class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+        placeholder="Email"
+        aria-describedby="email-error"
+        transition:persist
+      />
+      {inputErrors.email && <p id="email-error">{inputErrors.email.join(',')}</p>}
+
+    </div>
+    <div>
+      <label for="password" class="sr-only">Contraseña</label>
+      <input
+        id="password"
+        name="password"
+        type="password"
+        required
+        class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+        placeholder="Contraseña"
+        aria-describedby="password-error"
+        transition:persist
+      />
+      {inputErrors.password && <p id="password-error">{inputErrors.password.join(',')}</p>}
+    </div>
+  </div>
+
+
+  <div>
+    <button
+      type="submit"
+      class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+    >
+      Iniciar sesión
+    </button>
+  </div>
+
+  {errorMessage&& (
+    <p class="error">Imposible iniciar sesión. Intente de nuevo más tarde.</p>
+  )} 
+</form>
+
+    </div>
+  </main>
+</Layout>
