@@ -5,7 +5,7 @@ export const server = {
     login: defineAction({
         accept: "form",
         input: z.object({
-            email: z.string().email(),
+            email: z.string().email("El email no es válido"),
             password: z.string()
         }),
         handler: async(input) => {
@@ -19,35 +19,23 @@ export const server = {
               });
             const data = await response.json();
             console.log("data: ", data);
-            if(response.ok){
-                // Guardar token en server, hacer algo en el client y redirect
-                
+            if(response.ok){                
                 return {
                         ok: true,
                         token: data.token
                     }
-                
             } 
-          
         }
     }),
     logout: defineAction({
         accept: "form",
         handler: async(_,context) => {
-            console.log("context: ", context)
             try {
-                console.log("Cookies antes del logout:", context.cookies.get("token"));
-                
-                // Eliminar la cookie
                 context.cookies.delete("token");
-                
-
                 return {
                     ok: true,
                     message: "Sesión cerrada correctamente"
-                }
-                
-             
+                }      
             } catch (error) {
                 console.error("Error durante el logout:", error);
                 return {
@@ -65,7 +53,6 @@ export const server = {
             name: z.string().nullable().optional().default(null)
         }),
         handler: async(input) => {
-            console.log("input: ", input);
             const response = await fetch('http://localhost:3000/register', {
                 method: 'POST',
                 headers: {
@@ -73,7 +60,6 @@ export const server = {
                 },
                 body: JSON.stringify(input),
               });
-            console.log("response: ", response)
         }
     }),
     test: defineAction({

@@ -1,5 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
+const token = Astro.cookies.get("token");
+const response = await fetch('http://localhost:3000/posts',{
+	method: 'GET',
+	headers: {
+		'Content-Type': 'application/json',
+		'Authorization': `Bearer ${token?.value}`
+	},
+});
+const data = await response.json();
+console.log("data: ", data)
+            
 ---
 
 <Layout title="Frontend Astro">
@@ -8,7 +19,11 @@ import Layout from '../layouts/Layout.astro';
 		<section>
 			{
 				Astro.cookies.get("token") ?
+				data.length > 0 ?
 				<h2>Publicaciones recientes</h2>
+				<p>Hay {data.length} publicaciones</p>
+				:
+				<h2>No hay publicaciones recientes</h2>
 				:
 				<h2>Inicia sesión para ver las publicaciones recientes</h2>
 			}
