@@ -1,22 +1,25 @@
 ---
+import { actions } from "astro:actions";
 import { Button } from "./ui/button";
 
-const { user } = Astro.props;
+const { userToken } = Astro.props;
 ---
 
 <header>
   <nav class="flex justify-between items-center w-dvw px-4">
     <Button variant="link"><a href="/">Inicio</a></Button>
     <Button variant="link"><a href="/about">Acerca de</a></Button>
-    {user ? (
+    {userToken ? (
       <>
         <Button variant="link"><a href="/dashboard">Perfil</a></Button>
-        <Button variant="outline" className="rounded-full hover:shadow-md hover:shadow-white" id="logout">Cerrar sesión</Button>
+        <form method="POST" action={actions.logout}>
+        <button>Log out</button>
+      </form>
       </>
     ) : (
       <>
         <Button variant="link"><a href="/register">Registrarse</a></Button>
-        <Button variant="outline" className="rounded-full hover:shadow-md hover:shadow-white"><a href="/login">Iniciar sesión</a></Button>
+        <Button variant="outline" className="rounded-full hover:shadow-md hover:shadow-foreground"><a href="/login">Iniciar sesión</a></Button>
       </>
     )}
   </nav>
