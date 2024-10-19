@@ -1,0 +1,28 @@
+---
+const { user } = Astro.props;
+---
+
+<header>
+  <nav>
+    <a href="/">Inicio</a>
+    {user ? (
+      <>
+        <a href="/profile">Perfil</a>
+        <button id="logout">Cerrar sesión</button>
+      </>
+    ) : (
+      <>
+        <a href="/login">Iniciar sesión</a>
+        <a href="/register">Registrarse</a>
+      </>
+    )}
+  </nav>
+</header>
+
+<script>
+  document.getElementById('logout')?.addEventListener('click', () => {
+    // Implementar lógica de cierre de sesión
+    localStorage.removeItem('token');
+    window.location.href = '/';
+  });
+</script>

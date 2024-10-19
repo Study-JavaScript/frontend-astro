@@ -1,0 +1,10 @@
+---
+const { post } = Astro.props;
+---
+
+<article class="post-card">
+  <h2>{post.content}</h2>
+  <p>Autor: {post.author.name}</p>
+  <p>Fecha: {new Date(post.createdAt).toLocaleDateString()}</p>
+  <p>Popularidad: {post.popularity}%</p>
+</article>
