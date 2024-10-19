@@ -1,7 +1,6 @@
 ---
-import { actions } from "astro:actions";
 import { Button } from "./ui/button";
-
+import { actions } from "astro:actions";
 const { userToken } = Astro.props;
 ---
 
@@ -13,8 +12,10 @@ const { userToken } = Astro.props;
       <>
         <Button variant="link"><a href="/dashboard">Perfil</a></Button>
         <form method="POST" action={actions.logout}>
-        <button>Log out</button>
-      </form>
+          <Button variant="outline" type="submit" id="logout" className="rounded-full hover:shadow-md hover:shadow-foreground">Cerrar sesión</Button>
+        </form>
+
+ 
       </>
     ) : (
       <>
@@ -25,10 +26,3 @@ const { userToken } = Astro.props;
   </nav>
 </header>
 
-<!-- <script>
-  document.getElementById('logout')?.addEventListener('click', () => {
-    // Implementar lógica de cierre de sesión
-    localStorage.removeItem('token');
-    window.location.href = '/';
-  });
-</script> -->

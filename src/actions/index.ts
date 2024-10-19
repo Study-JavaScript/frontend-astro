@@ -32,30 +32,26 @@ export const server = {
         }
     }),
     logout: defineAction({
-        
-        handler: async({cookies}) => {
+        accept: "form",
+        handler: async(_,context) => {
+            console.log("context: ", context)
             try {
-                console.log("Cookies antes del logout:", cookies.getAll());
+                console.log("Cookies antes del logout:", context.cookies.get("token"));
                 
                 // Eliminar la cookie
-                cookies.delete("token", {
-                    path: "/",  // Asegúrate de que esto coincida con la configuración original
-                    // domain: "tu-dominio.com",  // Si usaste un dominio específico al crear la cookie
-                    // secure: true,  // Si la cookie se configuró como segura
-                    // httpOnly: true,  // Si la cookie se configuró como httpOnly
-                });
+                context.cookies.delete("token");
                 
-                console.log("Cookie 'token' eliminada");
-                
-                // Verificar si la cookie realmente se eliminó
-                const remainingCookies = cookies.getAll();
-                console.log("Cookies después del logout:", remainingCookies);
+
+                return {
+                    ok: true,
+                    message: "Sesión cerrada correctamente"
+                }
                 
              
             } catch (error) {
                 console.error("Error durante el logout:", error);
                 return {
-                    success: false,
+                    ok: false,
                     message: "Error al cerrar la sesión"
                 };
             }
