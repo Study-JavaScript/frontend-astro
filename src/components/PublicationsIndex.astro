@@ -3,6 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 // import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 // import { CalendarIcon, ThumbsUpIcon } from "lucide-react"
 import type {Post} from "@domain/entities/post"
+import BuscadorPosts from "./BuscadorPosts.tsx"
 
 // interface Publication {
 //   content: string
@@ -25,8 +26,12 @@ const publications: Post[] = await response.json();
     {
         Astro.cookies.get("token") ?
         publications.length > 0 ?
+        <div class="flex w-full justify-between">
+        <span>
         <h2>Publicaciones recientes</h2>
-        <p>Hay {publications.length} publicaciones</p>
+        <p>Hay {publications.length} publicaciones</p></span>
+        <BuscadorPosts />
+        </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
       {publications.filter((pub: Post)=>pub.deleted === false).map((pub: Post, index: number) => (
         <Card key={index} className="flex flex-col">
