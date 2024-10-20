@@ -10,14 +10,25 @@ import type {Post} from "@domain/entities/post"
 //   createdAt: string
 //   popularity: number
 // }
-interface Props {
-    publications: Post[]
-}
-const { publications } = Astro.props;
----
 
+const token = Astro.cookies.get("token");
+const response = await fetch('http://localhost:3000/posts',{
+	method: 'GET',
+	headers: {
+		'Content-Type': 'application/json',
+		'Authorization': `Bearer ${token?.value}`
+	},
+});
+const publications: Post[] = await response.json();  
+---
+<section>
+    {
+        Astro.cookies.get("token") ?
+        publications.length > 0 ?
+        <h2>Publicaciones recientes</h2>
+        <p>Hay {publications.length} publicaciones</p>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-      {publications.filter(pub=>pub.deleted === false).map((pub, index) => (
+      {publications.filter((pub: Post)=>pub.deleted === false).map((pub: Post, index: number) => (
         <Card key={index} className="flex flex-col">
           <CardHeader>
             <div class="flex items-center space-x-4">
@@ -47,4 +58,10 @@ const { publications } = Astro.props;
         </Card>
       ))}
     </div>
-  
+  	:
+				<h2>No hay publicaciones recientes</h2>
+				:
+				<h2>Inicia sesión para ver las publicaciones recientes</h2>
+			}
+			
+		</section>

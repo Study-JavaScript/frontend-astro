@@ -1,7 +1,7 @@
 ---
 import { Button } from "./ui/button";
 import { actions } from "astro:actions";
-const { userToken } = Astro.props;
+const userToken = Astro.cookies.get("token")
 ---
 
 <header>

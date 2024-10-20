@@ -1,34 +1,20 @@
 ---
 import PublicationsIndex from '@/components/PublicationsIndex.astro';
 import Layout from '../layouts/Layout.astro';
-const token = Astro.cookies.get("token");
-const response = await fetch('http://localhost:3000/posts',{
-	method: 'GET',
-	headers: {
-		'Content-Type': 'application/json',
-		'Authorization': `Bearer ${token?.value}`
-	},
-});
-const data = await response.json();            
+import { Hourglass } from 'lucide-react';
 ---
 
 <Layout title="Frontend Astro">
 	<main>
 		<h1 class="text-7xl text-center font-extrabold text-primary">Bienvenido a<span class="text-secondary block">🚀 Astro 5</span></h1>
-		<section>
-			{
-				Astro.cookies.get("token") ?
-				data.length > 0 ?
-				<h2>Publicaciones recientes</h2>
-				<p>Hay {data.length} publicaciones</p>
-				<PublicationsIndex publications={data}/>
-				:
-				<h2>No hay publicaciones recientes</h2>
-				:
-				<h2>Inicia sesión para ver las publicaciones recientes</h2>
-			}
+		
+				<PublicationsIndex />
+					<!-- <span slot="fallback" class="flex items-center justify-center">
+						<Hourglass className="animate-spin" />
+						<h2>Cargando publicaciones...</h2>
+					</span> -->
+		
 			
-		</section>
 	</main>
 </Layout>
 

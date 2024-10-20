@@ -57,10 +57,14 @@ La aplicación debe tener un `frontend` básico con al menos las siguientes pág
 - Añade la posibilidad a la página de inicio de ordenar las publicaciones por porcentaje de popularidad ascendente, descendente, y por autor alfabéticamente (AZ y ZA).
 - Añade a tu página de inicio una barra de búsqueda que implemente la posibilidad de buscar publicaciones que contengan el texto introducido en su contenido. Implementa la función debounce para limitar las búsquedas.
 ### Detalles
-#### Server Actions & Rendering
+#### Server Actions & Pre-rendering
 - Usar server actions para las peticiones al backend.
 - Tratar de minimizar el uso del cliente, para que sea el servidor el que represente el frontend y se encargue de la lógica de la aplicación.
 - Utilizar las cookies del servidor para el manejo de sesiones y autenticación.
+#### Server Islands, Static Generation & Fallbacks
+- Usar server islands para las secciones que necesitan datos dinámicos, para ello utilizar componentes utilizando el atributo `server:defer`.
+- Usar static generation para todas las paginas posibles, para ello utilizar la directiva `export const prerender = true`.
+- Usar fallbacks para las secciones con datos dinámicos, para ello utilizar el atributo `slot = "fallback` en el componente que necesite datos dinámicos.
 
 
 
