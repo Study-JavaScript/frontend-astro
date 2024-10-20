@@ -8,6 +8,9 @@
       ],
       "@domain/*":[
         "../domain/*"
+      ],
+      "@utils/*":[
+        "../utils/*"
       ]
     },
     "jsx": "react-jsx",
