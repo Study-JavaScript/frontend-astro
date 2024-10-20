@@ -1,0 +1,107 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { isInputError } from "astro:actions";
+import { actions } from "astro:actions";
+const result = Astro.getActionResult(actions.register);
+if(result){
+    console.log("result: ", result);
+    // Si hay resultado, mostraremos un mensaje al usuario y redirigiremos a la pagina de iniciio de sesión
+    // alert("Se ha creado la cuenta correctamente, ahora puedes iniciar sesión")
+    // No se hace el redirect 
+    Astro.redirect("/login");
+}
+const inputErrors = isInputError(result?.error) ? result.error.fields : {};
+
+---
+<Layout title="Dashboard">
+    <main class="min-h-[80vh] flex items-center justify-center bg-primary">
+        <div
+            class="max-w-md w-full space-y-8 p-8 bg-background/80 rounded-xl shadow-lg"
+        >
+            <div class="text-center">
+                <h1 class="text-3xl text-foreground/80 font-bold">
+                    Bienvenido a la App
+                </h1>
+                <p class="mt-2 text-foreground/90">
+                    Crea tu propia cuenta
+                </p>
+            </div>
+
+            <form method="POST" action={actions.register} class="mt-8 space-y-6">
+                <div class="rounded-md shadow-sm space-y-4">
+                    <div>
+                        <label for="name" class="sr-only">Name</label>
+                        <input
+                            id="name"
+                            name="name"
+                            type="text"
+                            required
+                            class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                            placeholder="Nombre"
+                            aria-describedby="name-error"
+                            transition:persist
+                        />
+                        {
+                            inputErrors.name && (
+                                <p id="name-error">
+                                    {inputErrors.name.join(",")}
+                                </p>
+                            )
+                        }
+                    </div>
+
+                    <div>
+                        <label for="email" class="sr-only">Email</label>
+                        <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            required
+                            class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                            placeholder="Email"
+                            aria-describedby="email-error"
+                            transition:persist
+                        />
+                        {
+                            inputErrors.email && (
+                                <p id="email-error">
+                                    {inputErrors.email.join(",")}
+                                </p>
+                            )
+                        }
+                    </div>
+                    <div>
+                        <label for="password" class="sr-only">Contraseña</label>
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                            placeholder="Contraseña"
+                            aria-describedby="password-error"
+                            transition:persist
+                        />
+                        {
+                            inputErrors.password && (
+                                <p id="password-error">
+                                    {inputErrors.password.join(",")}
+                                </p>
+                            )
+                        }
+                    </div>
+                </div>
+
+                <div>
+                    <button
+                        type="submit"
+                        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                        Iniciar sesión
+                    </button>
+                </div>
+
+                <!-- {errorMessage && <p class="error">{errorMessage}</p>} -->
+            </form>
+        </div>
+    </main>
+</Layout>

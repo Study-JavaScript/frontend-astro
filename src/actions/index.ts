@@ -8,24 +8,24 @@ export const server = {
             email: z.string().email("El email no es válido"),
             password: z.string()
         }),
-        handler: async(input) => {
+        handler: async (input) => {
             console.log("input: ", input);
             const response = await fetch('http://localhost:3000/login', {
                 method: 'POST',
                 headers: {
-                  'Content-Type': 'application/json',
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(input),
-              });
+            });
             const data = await response.json();
             console.log("data: ", data);
-            if(response.ok){                
+            if (response.ok) {
                 return {
-                        ok: true,
-                        token: data.token,
-                        email: input.email
-                    }
-            } 
+                    ok: true,
+                    token: data.token,
+                    email: input.email
+                }
+            }
         }
     }),
     editUser: defineAction({
@@ -36,7 +36,7 @@ export const server = {
             email: z.string().email("El email no es válido"),
             password: z.string().optional()
         }),
-        handler: async(input, context) => {
+        handler: async (input, context) => {
             console.log("input: ", input);
             const token = context.cookies.get("token");
             console.log("token: ", token?.value);
@@ -54,17 +54,17 @@ export const server = {
                 ok: true,
                 data: data
             }
-        },     
+        },
     }),
     logout: defineAction({
         accept: "form",
-        handler: async(_,context) => {
+        handler: async (_, context) => {
             try {
                 context.cookies.delete("token");
                 return {
                     ok: true,
                     message: "Sesión cerrada correctamente"
-                }      
+                }
             } catch (error) {
                 console.error("Error durante el logout:", error);
                 return {
@@ -81,22 +81,42 @@ export const server = {
             password: z.string().min(8, "La contraseña debe tener al menos 8 caracteres"),
             name: z.string().nullable().optional().default(null)
         }),
-        handler: async(input) => {
-            const response = await fetch('http://localhost:3000/register', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(input),
-              });
+        handler: async (input) => {
+            try {
+                const response = await fetch('http://localhost:3000/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(input),
+                });
+                const data = await response.json();
+                if (data.message) {
+                    return {
+                        ok: false,
+                        message: data.message
+                    }
+                } else {
+                    return {
+                        ok: true,
+                        data: data
+                    }
+                }
+            } catch (error) {
+                console.error("Error durante el registro:", error);
+                return {
+                    ok: false,
+                    message: "Error durante el registro"
+                }
+            }
         }
     }),
     test: defineAction({
         input: z.object({
             name: z.string(),
-          }),
-          handler: async (input) => {
+        }),
+        handler: async (input) => {
             return `Hello, ${input.name}!`
-          }
+        }
     })
 }
