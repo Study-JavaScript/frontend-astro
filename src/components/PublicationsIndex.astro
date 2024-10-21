@@ -1,17 +1,22 @@
 ---
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-// import { CalendarIcon, ThumbsUpIcon } from "lucide-react"
 import type {Post} from "@domain/entities/post"
+import { CalendarIcon } from "lucide-react"
 
-
+// Obtener los searchParams
+const searchParams = Astro.url.searchParams;
+const search = searchParams.get('q') || ''
+const order = searchParams.get('order') || "{order}"
+console.log("order :",order)
+console.log("search :",search)
 const token = Astro.cookies.get("token");
-const response = await fetch('http://localhost:3000/posts',{
-	method: 'GET',
-	headers: {
-		'Content-Type': 'application/json',
-		'Authorization': `Bearer ${token?.value}`
-	},
+console.log("url :",`http://localhost:3000/posts/${order}${search ? `?q=${search}` : ''}`)
+const response = await fetch(`http://localhost:3000/posts/${order}${search ? `?q=${search}` : ''}`,{
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token?.value}`
+    },
 });
 const publications: Post[] = await response.json();  
 ---
@@ -23,9 +28,22 @@ const publications: Post[] = await response.json();
         <span>
         <h2>Publicaciones recientes</h2>
         <p>Hay {publications.length} publicaciones</p></span>
+        <span>
         <div>
-            <input type="text" id="buscador" placeholder="Buscar..." />
+            <input type="text" id="buscador" value={search} placeholder="Buscar..." />
         </div>
+        <div>
+          
+          <select name="order" id="order">
+            <option value="{order}" selected={order === "{order}"}>Default (Fecha ascendente)</option>
+            <option value="nombre-asc" selected={order === "nombre-asc"}>Nombre ascendente</option>
+            <option value="nombre-desc" selected={order === "nombre-desc"}>Nombre descendente</option>
+            <option value="popularidad-asc" selected={order === "popularidad-asc"}>Popularidad ascendente</option>
+            <option value="popularidad-desc" selected={order === "popularidad-desc"}>Popularidad descendente</option>
+          </select>
+          
+          </div>
+        </span>
         </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
       {publications.filter((pub: Post)=>pub.deleted === false).map((pub: Post, index: number) => (
@@ -37,11 +55,11 @@ const publications: Post[] = await response.json();
                 <AvatarFallback>{pub.authorId.toString().charAt(0)}</AvatarFallback>
               </Avatar> */}
               <div>
-                <p class="text-sm font-medium">{pub.authorId}</p>
-                {/* <p class="text-xs text-muted-foreground flex items-center">
+                <p class="text-sm font-medium">{pub.authorName}</p>
+                <p class="text-xs text-muted-foreground flex items-center">
                   <CalendarIcon className="mr-1 h-3 w-3" />
-                  {pub.createdAt}
-                </p> */}
+                  {pub.date.toString().split('T')[0]}
+                </p>
               </div>
             </div>
           </CardHeader>
@@ -68,11 +86,33 @@ const publications: Post[] = await response.json();
 
     <script>
       import { debounce } from "@utils/execute"
-      const buscador = document.getElementById("buscador")
-      buscador?.addEventListener("input", debounce((e) => {
-          const searchTerm = e.target.value.toLowerCase()
-          // Aquí puedes agregar la lógica para filtrar los posts
-          console.log("Buscando:", searchTerm)
-          // Ejemplo: filtrarPosts(searchTerm)
-      }, 300))
+      let currentParams = {
+        q: new URL(window.location.href).searchParams.get('q') || '',
+        order: new URL(window.location.href).searchParams.get('order') || "{order}"
+      };
+
+      function updateURLAndReload() {
+        let url = `http://localhost:4321/?order=${currentParams.order}`;
+       
+        if (currentParams.q) {
+            url += `&q=${currentParams.q}`;
+        }
+        
+        window.location.href = url;
+    }
+  
+      const buscador = document.getElementById("buscador") as HTMLInputElement;
+      buscador?.addEventListener("input", debounce((e: Event) => {
+          const searchTerm = (e.target as HTMLInputElement).value;
+          currentParams.q = searchTerm;
+          updateURLAndReload();
+      }, 2000));
+  
+      const orderSelect = document.getElementById("order") as HTMLSelectElement;
+      orderSelect?.addEventListener("change", (e: Event) => {
+          const selectedOrder = (e.target as HTMLSelectElement).value;
+          currentParams.order = selectedOrder;
+          
+          updateURLAndReload();
+      });
   </script>

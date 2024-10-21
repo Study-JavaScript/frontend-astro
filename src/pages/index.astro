@@ -7,8 +7,8 @@ import Layout from '../layouts/Layout.astro';
 <Layout title="Frontend Astro">
 	<main>
 		<h1 class="text-7xl text-center font-extrabold text-primary">Bienvenido a<span class="text-secondary block">🚀 Astro 5</span></h1>
-		
-				<PublicationsIndex />
+				<PublicationsIndex/>
+				<!-- <PublicationsIndex client:load token={Astro.cookies.get("token")?.value} /> -->
 					<!-- <span slot="fallback" class="flex items-center justify-center">
 						<Hourglass className="animate-spin" />
 						<h2>Cargando publicaciones...</h2>
